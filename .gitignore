@@ -1,0 +1,8 @@
+venv
+
+*.png
+*.jpg
+
+__pycache__/
+
+credentials.json
