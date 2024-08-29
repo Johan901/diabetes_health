@@ -42,4 +42,24 @@ This project is a demonstration of basic ETL (Extract, Transform, Load) processe
     jupyter notebook
 
 
+## Data Migration Process 📂 ➡️ 🛢️
+
+- Create the PostgreSQL Database: We started by creating a local PostgreSQL database named diabetes_data.
+- Load Data into PostgreSQL:
+    The data was imported from a CSV file into the PostgreSQL database.
+    We created a table named diabetes_data with the necessary columns to hold all the information.
+    The data insertion was handled using Python scripts that connected to the database using credentials stored in a credentials.json file.
+
+## Exploratory Data Analysis (EDA) 📊
+
+- Data Import: The dataset was imported directly from the PostgreSQL database into our Jupyter Notebook environment using Pandas and SQLAlchemy.
+
+- Data Cleaning: We identified and handled missing values, converted categorical variables (e.g., gender, ethnicity, smoking status) to appropriate formats, and ensured that continuous variables were within expected ranges (e.g., BMI, blood glucose levels).
+
+- Data Visualization:
+
+    Various charts were created to understand the distribution of health-related metrics such as blood pressure, glucose levels, and cholesterol.
+    Boxplots and violin plots were used to analyze BMI and HbA1c levels across different genders and ethnicities.
+    A correlation matrix was constructed to visualize the relationships between different health variables.
+
 
