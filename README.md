@@ -1,17 +1,26 @@
 # Project ETL_ 📊
 
 ## Overview
-This is a test project for my ETL class. The project demonstrates basic ETL processes and techniques. More updates and features will be added in the future. 🚀
+This project is a demonstration of basic ETL (Extract, Transform, Load) processes and techniques for the ETL class. It focuses on analyzing a health-related dataset, specifically on diabetes, with detailed information on 1,879 patients. Throughout the project, various data analysis and visualization tools are utilized. More updates and features will be added in the future. 🚀
+
+
 
 ## Features 🌟
-- Basic ETL functionality 🛠️
-- Sample data processing 📈
-- User authentication 🔒
+- Loading data from a CSV file into a PostgreSQL database. 📂 ➡️ 🛢️
+- Exploratory Data Analysis (EDA) using Python and Jupyter Notebook. 📊
+- Data visualization using charts to identify patterns and trends. 📈
+- Secure storage of database credentials using configuration files. 🔒
+- Implementation and documentation on GitHub with sensitive data protection. 🌐
 
 ## Technologies Used 🖥️
 - Python 🐍
-- Jupyter 📓
-- Virtual Environment 🌐
+- Jupyter Notebook 📓
+- PostgreSQL 🛢️
+- Pandas 🐼
+- Matplotlib 📊
+- SQLAlchemy ⚙️
+- dotenv (for managing environment variables) 🌐
+- GitHub 🐙
 
 ## Setup 🛠️
 1. **Clone the repository:**
