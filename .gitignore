@@ -16,3 +16,5 @@ dim_demography.csv
 fact_table.csv
 
 README.md
+
+*.csv
