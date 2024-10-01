@@ -3,14 +3,14 @@ from airflow.operators.python import PythonOperator
 from airflow.hooks.postgres_hook import PostgresHook
 from datetime import datetime
 
-# Función para obtener datos de PostgreSQL
+# obtenemos datos de PostgreSQL
 def fetch_data_from_postgres():
     pg_hook = PostgresHook(postgres_conn_id='postgres_diabetes_data')
     records = pg_hook.get_records("SELECT * FROM diabetes_data LIMIT 10;")  # Consulta de la tabla diabetes_data
     for row in records:
         print(row)  # Los registros se imprimirán en los logs de Airflow
 
-# Definir el DAG
+# definimos el DAG
 default_args = {
     'owner': 'airflow',
     'start_date': datetime(2024, 9, 27),

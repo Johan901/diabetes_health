@@ -8,8 +8,11 @@ __pycache__/
 credentials.json
 
 diabetes_data.csv
+
 dim_health_habits.csv
+
 dim_demography.csv
+
 fact_table.csv
 
 README.md
