@@ -78,7 +78,7 @@ def load_dimensional_model():
     conn = postgres_hook.get_conn()
     cursor = conn.cursor()
     
-    # Crear tablas de hechos y dimensiones
+    #tablas de hechos y dimensiones
     cursor.execute("""CREATE TABLE IF NOT EXISTS dim_patient (
                         patientid SERIAL PRIMARY KEY,
                         age INT,
@@ -125,24 +125,23 @@ def load_dimensional_model():
 
     conn.commit()
     
-    # Insertar datos en las tablas de hechos y dimensiones desde el CSV de datos fusionados
+    # Insertar datos en las tablas de hechos y dimensiones desde el merge
     merged_df = pd.read_csv('/tmp/merged_data.csv')
 
     for _, row in merged_df.iterrows():
-        # Verificar y limpiar los datos antes de insertar
+        # limpiar los datos antes de insertar
         age = int(row['age']) if pd.notnull(row['age']) else None
         gender = str(row['gender']) if pd.notnull(row['gender']) else None
         ethnicity = str(row['ethnicity']) if pd.notnull(row['ethnicity']) else None
         socioeconomicstatus = str(row['socioeconomicstatus']) if pd.notnull(row['socioeconomicstatus']) else None
         educationlevel = str(row['educationlevel']) if pd.notnull(row['educationlevel']) else None
 
-        # Insertar en `dim_patient`
+        
         cursor.execute("""INSERT INTO dim_patient (age, gender, ethnicity, socioeconomicstatus, educationlevel)
                           VALUES (%s, %s, %s, %s, %s) 
                           ON CONFLICT (patientid) DO NOTHING;""",
                        (age, gender, ethnicity, socioeconomicstatus, educationlevel))
 
-        # Preparar datos de `dim_health_indicators`
         bmi = float(row['bmi']) if pd.notnull(row['bmi']) else None
         smoking = bool(row['smoking']) if pd.notnull(row['smoking']) else None
         alcoholconsumption = bool(row['alcoholconsumption']) if pd.notnull(row['alcoholconsumption']) else None
@@ -154,7 +153,6 @@ def load_dimensional_model():
         occupationalexposurechemicals = bool(row['occupationalexposurechemicals']) if pd.notnull(row['occupationalexposurechemicals']) else None
         waterquality = str(row['waterquality']) if pd.notnull(row['waterquality']) else None
 
-        # Insertar en `dim_health_indicators`
         cursor.execute("""INSERT INTO dim_health_indicators (bmi, smoking, alcoholconsumption, physicalactivity, dietquality, 
                                                                sleepquality, qualityoflifescore, heavymetalsexposure, 
                                                                occupationalexposurechemicals, waterquality)
@@ -163,7 +161,6 @@ def load_dimensional_model():
                        (bmi, smoking, alcoholconsumption, physicalactivity, dietquality, sleepquality, qualityoflifescore, 
                         heavymetalsexposure, occupationalexposurechemicals, waterquality))
 
-        # Insertar en `fact_diabetes`
         diagnosis = str(row['diagnosis']) if pd.notnull(row['diagnosis']) else None
         fastingbloodsugar = float(row['fastingbloodsugar']) if pd.notnull(row['fastingbloodsugar']) else None
         hba1c = float(row['hba1c']) if pd.notnull(row['hba1c']) else None

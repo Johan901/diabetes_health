@@ -3,36 +3,31 @@ from kafka import KafkaConsumer
 import json
 import matplotlib.pyplot as plt
 
-# Configuración de Kafka
+# CKafka
 consumer = KafkaConsumer(
-    'merged_data_topic',  # Nombre del topic
-    bootstrap_servers=['localhost:9093'],  # Kafka server
+    'merged_data_topic',  # topic
+    bootstrap_servers=['localhost:9093'],  # kafka server
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
-# Configura la interfaz de Streamlit
 st.title('Real-Time Dashboard - Kafka Consumer')
 st.subheader('Gráfico de Muertes en Tiempo Real')
 
 deaths = []
 
-# Esto mostrará los mensajes en tiempo real
 try:
     st.write('Esperando mensajes...')
     for message in consumer:
         data = message.value
-        deaths.append(data.get('deaths', 0))  # Agregar las muertes al listado
+        deaths.append(data.get('deaths', 0))  
         
-        # Mostrar los datos recibidos
-        st.json(data)  # Mostrar los datos en formato JSON
+        st.json(data)  
         
-        # Actualizar el gráfico de muertes en tiempo real
         st.write("Gráfico de muertes:")
-        st.line_chart(deaths)  # Mostrar la evolución de las muertes
+        st.line_chart(deaths)  
 
 except KeyboardInterrupt:
-    # Detener el consumidor de Kafka si interrumpimos el proceso (Ctrl + C)
     st.write("Consumo detenido.")
     consumer.close()
