@@ -5,21 +5,23 @@ services:
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
+      POSTGRES_DB: diabetes_data
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   airflow-webserver:
-    image: apache/airflow:2.5.1
+    build: .
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__CORE__FERNET_KEY: ''
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
       AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
-      AIRFLOW__WEBSERVER__SECRET_KEY: gH7%rP8!jKd2@F1e  # Clave secreta añadida aquí
+      AIRFLOW__WEBSERVER__SECRET_KEY: gH7%rP8!jKd2@F1e
     ports:
-      - 8081:8080
+      - "8081:8080"
     volumes:
       - ./dags:/opt/airflow/dags
     depends_on:
@@ -29,19 +31,48 @@ services:
                airflow webserver --port 8080"
 
   airflow-scheduler:
-    image: apache/airflow:2.5.1
+    build: .
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__CORE__FERNET_KEY: ''
-      AIRFLOW__WEBSERVER__SECRET_KEY: gH7%rP8!jKd2@F1e  # Clave secreta añadida aquí también
+      AIRFLOW__WEBSERVER__SECRET_KEY: gH7%rP8!jKd2@F1e
     volumes:
       - ./dags:/opt/airflow/dags
       - ./files:/opt/airflow/dags/files
+      - ./project_ETL:/opt/airflow/dags/project_ETL
     depends_on:
       - postgres
     command: >
       bash -c "airflow scheduler"
 
+  kafka:
+    image: wurstmeister/kafka:latest
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9093
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9093
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    ports:
+      - "9093:9093"
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    ports:
+      - "2181:2181"
+
+  consumer:
+    build:
+      context: .  
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_BROKER=kafka:9093  
+    command: ["python", "kafka_consumer.py"]
+
 volumes:
   postgres-db-volume:
+  
