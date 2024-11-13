@@ -193,4 +193,4 @@ load_dimensional_model_task = PythonOperator(task_id='load_dimensional_model', p
 extract_postgres_task >> transform_postgres_task
 extract_api_task >> transform_api_task
 [transform_postgres_task, transform_api_task] >> merge_data_task
-merge_data_task >> [load_to_kafka_task, load_dimensional_model_task]
+merge_data_task >> [load_to_kafka_task, load_dimensional_model_task] 
