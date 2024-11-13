@@ -12,10 +12,12 @@ services:
       - "5432:5432"
 
   airflow-webserver:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/diabetes_data
       AIRFLOW__CORE__FERNET_KEY: ''
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
       AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
@@ -31,10 +33,12 @@ services:
                airflow webserver --port 8080"
 
   airflow-scheduler:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/diabetes_data
       AIRFLOW__CORE__FERNET_KEY: ''
       AIRFLOW__WEBSERVER__SECRET_KEY: gH7%rP8!jKd2@F1e
     volumes:
@@ -49,30 +53,31 @@ services:
   kafka:
     image: wurstmeister/kafka:latest
     environment:
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9093
-      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9093
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092  # Cambiado a localhost
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092               # Cambiado el puerto a 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: 1
     ports:
-      - "9093:9093"
+      - "9092:9092"
     depends_on:
       - zookeeper
 
   zookeeper:
     image: wurstmeister/zookeeper:latest
     environment:
-      - ZOOKEEPER_CLIENT_PORT=2181
+      ZOOKEEPER_CLIENT_PORT: 2181
     ports:
       - "2181:2181"
 
   consumer:
     build:
-      context: .  
+      context: .
+      dockerfile: Dockerfile.consumer
     depends_on:
       - kafka
     environment:
-      - KAFKA_BROKER=kafka:9093  
+      KAFKA_BROKER: kafka:9092  
     command: ["python", "kafka_consumer.py"]
 
 volumes:
   postgres-db-volume:
-  

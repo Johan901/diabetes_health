@@ -1,0 +1,14 @@
+# Usa una imagen base de Python
+FROM python:3.9-slim
+
+# Establece el directorio de trabajo en /app
+WORKDIR /app
+
+# Copia el archivo kafka_consumer.py al contenedor
+COPY kafka_consumer.py .
+
+# Instala kafka-python
+RUN pip install --no-cache-dir kafka-python
+
+# Comando por defecto para ejecutar el consumidor de Kafka
+CMD ["python", "kafka_consumer.py"]

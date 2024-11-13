@@ -1,0 +1,5 @@
+# Usa la imagen oficial de Airflow como base
+FROM apache/airflow:2.5.1
+
+# Instala kafka-python si necesitas Kafka en Airflow también (opcional)
+RUN pip install --no-cache-dir kafka-python
