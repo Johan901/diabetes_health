@@ -63,3 +63,28 @@ This project is a demonstration of basic ETL (Extract, Transform, Load) processe
     A correlation matrix was constructed to visualize the relationships between different health variables.
 
 
+
+
+<h1>ACTUALIZATION 📊</h1>
+
+<h2>Real-Time Streaming and Dashboard 📈</h2>
+<ul>
+    <li><strong>Kafka Producer:</strong> Streams transformed health metrics to the <code>merged_data_topic</code> topic.</li>
+    <li><strong>Kafka Consumer:</strong> Processes and streams data to a real-time Streamlit dashboard.</li>
+    <li><strong>Streamlit Dashboard:</strong> Displays live health metrics like average deaths, mortality trends, and correlations.</li>
+</ul>
+
+<h2>Dimensional Modeling 🗂️</h2>
+<ul>
+    <li><strong>Fact Tables:</strong> Metrics on mortality and diabetes.</li>
+    <li><strong>Dimensions:</strong> Patient demographics, clinical measurements, and treatment details.</li>
+</ul>
+
+<h2>Power BI Dashboards 📊</h2>
+<ul>
+    <li><strong>Health Dashboard:</strong> Analyze BMI, smoking, and alcohol consumption impacts on health.</li>
+    <li><strong>Patients Dashboard:</strong> Explore demographic patterns by gender and socioeconomic status.</li>
+    <li><strong>Analysis Dashboard:</strong> Key insights into diabetes diagnostics and risk factors.</li>
+</ul>
+
+
